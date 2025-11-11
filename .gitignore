@@ -2,4 +2,3 @@ __pycache__
 *.pt
 *.ckpt
 *.torch
-*.pkl
