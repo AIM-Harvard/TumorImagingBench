@@ -72,7 +72,7 @@ def get_available_extractors():
     >>> from tumorimagingbench.models import get_available_extractors
     >>> extractors = get_available_extractors()
     >>> print(f"Available extractors: {extractors}")
-    Available extractors: ['CTClipVitExtractor', 'DummyResNetExtractor', ...]
+    Available extractors: ['CTClipVitExtractor', ...]
     """
     return list(AVAILABLE_EXTRACTORS.keys())
 
@@ -175,11 +175,6 @@ try:
 except ImportError as e:
     print(f"Warning: VocoExtractor not available due to missing dependencies: {e}")
 
-try:
-    from .dummy_resnet import DummyResNetExtractor
-    register_extractor('DummyResNetExtractor', DummyResNetExtractor)
-except ImportError as e:
-    print(f"Warning: DummyResNetExtractor not available due to missing dependencies: {e}")
 
 # Make available extractors accessible at module level
 __all__ = [
