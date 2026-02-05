@@ -1,146 +1,107 @@
 # TumorImagingBench
 
-<div align="center">
+TumorImagingBench is a framework for extracting foundation model embeddings from medical images and benchmarking them across radiomics datasets.
 
-**A comprehensive framework for evaluating and comparing foundation model feature extractors for radiomics in medical imaging.**
+**Overview**
+- Unified interface for multiple foundation model extractors.
+- Dataset-specific feature extraction pipelines.
+- Analysis workflows in notebooks for performance, robustness, and stability.
 
-</div>
-
-## 📋 Overview
-
-TumorImagingBench is a robust platform that enables researchers and practitioners to:
-
-* Extract meaningful features from medical images using state-of-the-art foundation models
-* Compare performance metrics across diverse radiomics datasets
-* Systematically evaluate model stability, robustness, and interpretability 
-* Benchmark novel foundation models against established approaches
-
-This framework bridges the gap between advancing foundation models and their practical application in medical imaging analysis.
-
-## 🔍 Key Features
-
-* **Unified Interface**: Common API for all foundation model extractors
-* **Comprehensive Evaluation**: Standardized metrics across multiple datasets
-* **Interpretability Tools**: Generation of saliency maps and attribution analysis
-* **Extensible Architecture**: Easily integrate new models and datasets
-
-## 📂 Repository Structure
-
+**Repository Structure**
 ```
-FM-extractors-radiomics/
-├── models/              # Foundation model implementations
-├── notebooks/           
-│   ├── modelling/       # Dataset-specific modeling notebooks
-│   └── analysis/        # Performance, robustness, and stability analysis
-├── scripts/             # Utility scripts for batch processing
-├── data/                # Dataset directory (not tracked in git)
-├── utils/               # Utility functions for data processing
-└── evaluation/          # Evaluation metrics and protocols
+TumorImagingBench/
+├── src/tumorimagingbench/     # Core package (models, evaluation)
+├── scripts/                   # Utility scripts
+├── tutorials/                 # Tutorials and guides
+├── notebooks/                 # Analysis notebooks
+├── data/                      # Datasets (ignored by git)
+├── dist/                      # Large weights (ignored by git)
+├── metrics/                   # Evaluation outputs
+└── plots/                     # Figures and plots
 ```
 
-## 🧠 Supported Foundation Models
-
-| Model | Description |
-|-------|-------------|
-| **FMCIB** | Foundation Model for Cancer Image Biomarkers |
-| **CT-FM** | CT Foundation Model |
-| **CT-CLIP-ViT** | CT-specific CLIP Vision Transformer |
-| **PASTA** | Pathology and Radiology Image Analysis Model |
-| **VISTA3D** | 3D Vision Transformer for Medical Imaging |
-| **Voco** | Volumetric Contrastive Learning Model |
-| **SUPREM** | Supervised Pretraining for Medical Imaging |
-| **Merlin** | Multi-modal Embedding for Radiology and Learning |
-| **MedImageInsight** | Medical Image Understanding Framework |
-| **ModelsGen** | Generative Foundation Models for Medical Imaging |
-
-## 📊 Supported Datasets
-
-* **LUNA16**: Lung Nodule Analysis
-* **DLCS**: Duke Lung Cancer Dataset
-* **NSCLC Radiomics**: Non-Small Cell Lung Cancer
-* **NSCLC Radiogenomics**: Radiogenomic Analysis of NSCLC
-* **C4KC-KiTs**: Clear Cell Renal Cell Carcinoma Kidney Tumor Segmentation
-* **Colorectal Liver Metastases**: Liver Metastases Dataset
-
-## 💻 Installation
-
+**Installation**
 ```bash
-
-# Create new environment
-uv venv
-
-# Activate the environment
-
-# Clone the repository
-git clone https://github.com/AIM-Harvard/TumorImagingBench.git
-cd TumorImagingBench
-
-# Install dependencies
 uv sync
+uv run python -m pip install -e .
 ```
 
-## 🚀 Usage
+Python requirement: `>=3.10,<3.12`.
 
-### Feature Extraction
-
+**Quickstart**
+List available extractors:
 ```python
-from models import CTClipVitExtractor, FMCIBExtractor
+from tumorimagingbench.models import get_available_extractors
 
-# Initialize a model
-model = FMCIBExtractor()
-model.load()
-
-# Extract features from a sample
-features = model.extract(sample_path)
+print(get_available_extractors())
 ```
 
-For systematic feature extraction across datasets, we provide dedicated scripts in the `evaluation/` directory. These scripts offer a standardized approach that can be extended to new datasets through our base feature extractor class.
+Load a model and initialize weights:
+```python
+from tumorimagingbench.models import get_extractor
 
-### Model Evaluation
+Model = get_extractor("VISTA3DExtractor")
+model = Model()
+model.load()
+```
 
-For examples of model evaluation on different datasets, explore the notebooks in the `notebooks/modelling/` directory. These notebooks demonstrate:
+**Feature Extraction**
+Example using the LUNA16 extractor:
+```bash
+uv run python src/tumorimagingbench/evaluation/luna_feature_extractor.py \
+  --output features/luna.pkl \
+  --train-csv /path/to/train.csv \
+  --val-csv /path/to/val.csv \
+  --test-csv /path/to/test.csv
+```
 
-* Feature extraction workflows
-* Model training and validation
-* Performance analysis and comparison
-* Visualization of results
+Notes:
+- Dataset CSVs should include `image_path`, `coordX`, `coordY`, `coordZ` (and optional labels).
+- Many extractors ship with absolute default paths; override them via flags.
+- Feature extraction expects a CUDA-capable GPU.
 
-## 📈 Analysis Tools
+**Supported Models**
+- `CTClipVitExtractor`
+- `CTFMExtractor`
+- `FMCIBExtractor`
+- `MedImageInsightExtractor`
+- `MerlinExtractor`
+- `ModelsGenExtractor`
+- `PASTAExtractor`
+- `SUPREMExtractor`
+- `VISTA3DExtractor`
+- `VocoExtractor`
 
-Our repository includes specialized analysis notebooks:
+**Supported Datasets**
+- LUNA16
+- DLCS (Duke Lung Cancer Screening)
+- NSCLC Radiomics
+- NSCLC Radiogenomics
+- C4C-KiTS
+- Colorectal Liver Metastases
+- LNDb
+- RIDER (test-retest stability)
 
-| Notebook | Purpose |
-|----------|---------|
-| `stability_analysis.ipynb` | Evaluate model stability with various perturbations |
-| `robustness_analysis.ipynb` | Assess model robustness to noise and transformations |
-| `saliency_analysis.ipynb` | Visualize and analyze model activation maps |
-| `overall_analysis.ipynb` | Compare aggregate performance across models and datasets |
+**Tutorials**
+- See `tutorials/README.md` for guided notebooks and dataset/model integration walkthroughs.
 
-## 🤝 Contributing
+**Evaluation**
+- Example modelling workflow: `notebooks/modelling/luna_modelling.ipynb` (LUNA16 evaluation notebook).
+- Loads extracted features from `data/features/luna.pkl` and evaluates per-model performance.
+- Baselines: k-NN probing with AUC and 95% CI; linear probing (logistic regression); few-shot (1/5/10-shot).
+- Visual outputs saved to `plots/` (e.g., `luna_auc.png`, `luna_knn_overlap.png`, `luna_few_shot.png`, `luna_evaluation_protocols.png`).
+- Ensemble methods: alignment-weighted k-NN and stacking meta-learner; weight and comparison plots (e.g., `luna_alignment_weights.png`, `luna_stacking_weights.png`, `luna_ensemble_comparison.png`, `luna_ensemble_vs_individual.png`).
+- Aggregates results into `overall_results.csv`.
 
-We welcome contributions to improve this framework! Here's how you can contribute:
+**Contributing**
+- Follow the existing code style and update docs with changes.
+- Add targeted tests for new functionality.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-
-* Follow the existing code style and documentation patterns
-* Add tests for new functionality
-* Update documentation to reflect changes
-* Ensure backward compatibility where possible
-
-## 📚 Citation
-
-If you use this framework in your research, please cite:
-
+**Citation**
 ```bibtex
 @article{TumorImagingBench,
   title={Foundation model embeddings for quantitative tumor imaging biomarkers},
-  author={}, 
+  author={},
   journal={},
   year={},
   volume={},
@@ -149,6 +110,5 @@ If you use this framework in your research, please cite:
 }
 ```
 
-## 📄 License
-
-This project is licensed under the [LICENSE NAME] - see the LICENSE file for details.
+**License**
+MIT. See `LICENSE`.

@@ -39,7 +39,7 @@ TumorImagingBench/
 ├── src/tumorimagingbench/
 │   ├── models/                    # Foundation model extractors
 │   │   ├── base.py               # BaseModel abstract class
-│   │   ├── dummy_resnet.py       # Example implementation
+│   │   ├── ct_fm.py       # Example implementation
 │   │   └── [10+ models]          # FMCIB, VISTA3D, etc.
 │   └── evaluation/                # Feature extraction pipeline
 │       ├── base_feature_extractor.py
@@ -125,7 +125,7 @@ print(f"Available: {models}")
 from tumorimagingbench.models import get_extractor
 import torch
 
-Model = get_extractor('DummyResNetExtractor')
+Model = get_extractor('CTFMExtractor')
 model = Model()
 model.load()
 model = model.to('cuda')
@@ -176,5 +176,5 @@ uv sync
 
 - **Base Model**: `src/tumorimagingbench/models/base.py`
 - **Feature Extraction**: `src/tumorimagingbench/evaluation/base_feature_extractor.py`
-- **Example Models**: `src/tumorimagingbench/models/dummy_resnet.py`
+- **Example Models**: `src/tumorimagingbench/models/ct_fm.py`
 - **Example Extractors**: `src/tumorimagingbench/evaluation/dummy_dataset_feature_extractor.py`

@@ -54,7 +54,7 @@ Examples:
 
   # Extract using specific models
   python luna_feature_extractor.py --output features/luna.pkl \\
-    --models DummyResNetExtractor CTClipVitExtractor
+    --models CTFMExtractor CTClipVitExtractor
 
   # Extract with custom paths
   python luna_feature_extractor.py --output features/luna.pkl \\

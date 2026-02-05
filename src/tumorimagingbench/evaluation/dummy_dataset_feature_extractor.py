@@ -22,7 +22,7 @@ Usage:
 
     # Extract using specific models
     python dummy_dataset_feature_extractor.py --output features/dummy_dataset.pkl \\
-      --models DummyResNetExtractor CTClipVitExtractor
+      --models CTFMExtractor CTClipVitExtractor
 
     # Extract with custom paths
     python dummy_dataset_feature_extractor.py --output features/dummy_dataset.pkl \\
@@ -113,7 +113,7 @@ def extract_features(output_path, train_csv, val_csv, test_csv, model_names=None
         Path to test annotations CSV
     model_names : list of str, optional
         Specific models to extract (if None, uses all available)
-        Example: ['DummyResNetExtractor', 'CTClipVitExtractor']
+        Example: ['CTFMExtractor', 'CTClipVitExtractor']
 
     Returns:
     --------
@@ -129,7 +129,7 @@ def extract_features(output_path, train_csv, val_csv, test_csv, model_names=None
     >>> # Extract specific models
     >>> extract_features('features/dummy.pkl',
     ...                   'data/train.csv', 'data/val.csv', 'data/test.csv',
-    ...                   model_names=['DummyResNetExtractor'])
+    ...                   model_names=['CTFMExtractor'])
     """
     print("=" * 70)
     print("TumorImagingBench Feature Extraction - Dummy Dataset")
@@ -163,7 +163,7 @@ EXAMPLES:
 
   # Extract specific models only
   python dummy_dataset_feature_extractor.py --output features/dummy.pkl \\
-    --models DummyResNetExtractor CTClipVitExtractor
+    --models CTFMExtractor CTClipVitExtractor
 
   # Use custom data paths
   python dummy_dataset_feature_extractor.py --output features/dummy.pkl \\

@@ -14,7 +14,7 @@ def get_model_list(model_names=None):
     -----------
     model_names : list of str, optional
         Specific model names to extract. If None, uses all available models.
-        Example: ['DummyResNetExtractor', 'CTClipVitExtractor']
+        Example: ['CTFMExtractor', 'CTClipVitExtractor']
 
     Returns:
     --------

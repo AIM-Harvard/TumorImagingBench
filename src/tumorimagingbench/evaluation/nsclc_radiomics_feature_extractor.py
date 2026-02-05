@@ -54,7 +54,7 @@ Examples:
 
   # Extract using specific models
   python nsclc_radiomics_feature_extractor.py --output features/nsclc_radiomics.pkl \\
-    --models DummyResNetExtractor CTClipVitExtractor
+    --models CTFMExtractor CTClipVitExtractor
 
   # Extract with custom paths
   python nsclc_radiomics_feature_extractor.py --output features/nsclc_radiomics.pkl \\

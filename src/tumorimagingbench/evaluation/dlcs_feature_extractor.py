@@ -52,7 +52,7 @@ Examples:
 
   # Extract using specific models
   python dlcs_feature_extractor.py --output features/dlcs.pkl \\
-    --models DummyResNetExtractor CTClipVitExtractor
+    --models CTFMExtractor CTClipVitExtractor
 
   # Extract with custom paths
   python dlcs_feature_extractor.py --output features/dlcs.pkl \\
